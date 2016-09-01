@@ -23,7 +23,6 @@ def __match_token__(t, p, isEdge):
         return p == t.tag_ or p == t.pos_ or p == t.ent_type_ or p == t.lemma_
 
 
-
 def verify_pattern(pattern):
     regex = re.compile("^!?[a-zA-Z]+$|[*]{1,2}$")
 
@@ -89,7 +88,8 @@ def find_tokens(sentence, pattern):
         if pat_edge:
             for (t) in edges:
                 if __match_token__(t, pat_edge, True):
-                    if not __match_node__(t, list(p), tokens) and pat_edge == "**":
+                    __match_node__(t, list(p), tokens)
+                    if pat_edge == "**":
                         __match_edge__(t.children, ["**"] + p, tokens)
     result_tokens = []
     __match_node__(sentence.root, pattern.split("/"), result_tokens)
