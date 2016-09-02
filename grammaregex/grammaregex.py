@@ -2,6 +2,8 @@ import re
 
 
 class PatternSyntaxException(Exception):
+    """Exception class for raising wrong structure of patterns"""
+
     def __init__(self, pattern):
         self.pattern = pattern
 
@@ -24,6 +26,18 @@ def __match_token__(t, p, isEdge):
 
 
 def verify_pattern(pattern):
+    """Verifies if pattern for matching and finding fulfill expected structure.
+
+        Args:
+            pattern: string pattern to verify
+
+        Returns:
+            True if pattern has proper syntax, False otherwise
+
+        Raises:
+
+    """
+
     regex = re.compile("^!?[a-zA-Z]+$|[*]{1,2}$")
 
     def __verify_pattern__(__pattern__):
@@ -49,6 +63,20 @@ def print_tree(sent, token_attr):
 
 
 def match_tree(sentence, pattern):
+    """Matches given sentence with provided pattern.
+
+        Args:
+            sentence: sentence from Spacy(see: http://spacy.io/docs/#doc-spans-sents) representing complete statement
+            pattern: pattern to which sentence will be compared
+
+        Returns:
+            True if sentence match to pattern, False otherwise
+
+        Raises:
+            PatternSyntaxException: if pattern has wrong syntax
+
+    """
+
     if not verify_pattern(pattern):
         raise PatternSyntaxException(pattern)
 
@@ -73,6 +101,20 @@ def match_tree(sentence, pattern):
 
 
 def find_tokens(sentence, pattern):
+    """Find all tokens from parts of sentence fitted to pattern, being on the end of matched sub-tree(of sentence)
+
+        Args:
+            sentence: sentence from Spacy(see: http://spacy.io/docs/#doc-spans-sents) representing complete statement
+            pattern: pattern to which sentence will be compared
+
+        Returns:
+            Spacy tokens(see: http://spacy.io/docs/#token) found at the end of pattern if whole pattern match
+
+        Raises:
+            PatternSyntaxException: if pattern has wrong syntax
+
+    """
+
     if not verify_pattern(pattern):
         raise PatternSyntaxException(pattern)
 
