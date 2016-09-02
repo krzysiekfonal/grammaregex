@@ -1,3 +1,14 @@
+"""
+.. module:: grammaregex
+   :platform: Unix, Windows, Linux
+   :synopsis: A useful module for processing sentences(in tree form) by grammar patterns.
+
+.. moduleauthor:: Krzysztof Fonal <krzysiekfonal@gmail.com>
+
+
+"""
+
+
 import re
 
 
