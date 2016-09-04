@@ -43,12 +43,12 @@ So for instance to express pattern like: Verb connected by prep(prepositional) d
 connected by pobj(object of preposition) with NNP(singular noun) we will have such pattern:
 VBD/prep/IN/pobj/NNP
 
-You can use "*" char to express any edge or token like: 
+You can use '*' char to express any edge or token like: 
 VBD/*/IN - verb connected by any dependency with IN
 or 
 */prep/IN - any root node connected by prep with IN
 
-You can also use "**" chars to express any edge on any level like:
+You can also use '**' chars to express any edge on any level like:
 VBD/**/DT - verb connected with eny edge n-times with DT at the end
 
 
@@ -120,14 +120,14 @@ Now basing on this 'sent' variable we can do for instance:
   
   Result: True
 
- * find_tokens(sent, "VBD/prep/IN/pobj/*")
+* find_tokens(sent, "VBD/prep/IN/pobj/*")
 
-   Result: ["School", "1980"]
+  Result: ["School", "1980"]
 
- * find_tokens(sent, "VBD/prep/IN/*/[NNP,DT]")
+* find_tokens(sent, "VBD/prep/IN/*/[NNP,DT]")
 
-   Result: ["School"]
+  Result: ["School"]
 
- * find_tokens(sent, "VBD/**/DT")
+* find_tokens(sent, "VBD/**/DT")
 
-   Result: ["the", "the"]
+  Result: ["the", "the"]
