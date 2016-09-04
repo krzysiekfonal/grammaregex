@@ -22,12 +22,12 @@ class PatternSyntaxException(Exception):
         return repr("Error in syntax of provided pattern (%s)" % self.pattern)
 
 
-def __match_token__(t, p, isEdge):
+def _match_token(t, p, isEdge):
     p = p.strip()
     if p[0] == "!":
-        return not __match_token__(t, p[1:], isEdge)
+        return not _match_token(t, p[1:], isEdge)
     elif p[0] == "[":
-        return any(__match_token__(t, _p, isEdge) for _p in p[1:-1].split(","))
+        return any(_match_token(t, _p, isEdge) for _p in p[1:-1].split(","))
     elif p == "*" or p == "**":
         return True
     elif isEdge:
@@ -39,13 +39,9 @@ def __match_token__(t, p, isEdge):
 def verify_pattern(pattern):
     """Verifies if pattern for matching and finding fulfill expected structure.
 
-        Args:
-            pattern: string pattern to verify
+        :param pattern: string pattern to verify
 
-        Returns:
-            True if pattern has proper syntax, False otherwise
-
-        Raises:
+        :return: True if pattern has proper syntax, False otherwise
 
     """
 
@@ -64,6 +60,12 @@ def verify_pattern(pattern):
 
 
 def print_tree(sent, token_attr):
+    """Prints sentences tree as string using token_attr from token(like pos_, tag_ etc.)
+
+        :param sent: sentence to print
+        :param token_attr: choosen attr to present for tokens(e.g. dep_, pos_, tag_, ...)
+
+    """
     def __print_sent__(token, attr):
         print "{",
         [__print_sent__(t, attr) for t in token.lefts]
@@ -76,26 +78,23 @@ def print_tree(sent, token_attr):
 def match_tree(sentence, pattern):
     """Matches given sentence with provided pattern.
 
-        Args:
-            sentence: sentence from Spacy(see: http://spacy.io/docs/#doc-spans-sents) representing complete statement
-            pattern: pattern to which sentence will be compared
+        :param sentence: sentence from Spacy(see: http://spacy.io/docs/#doc-spans-sents) representing complete statement
+        :param pattern: pattern to which sentence will be compared
 
-        Returns:
-            True if sentence match to pattern, False otherwise
+        :return: True if sentence match to pattern, False otherwise
 
-        Raises:
-            PatternSyntaxException: if pattern has wrong syntax
+        :raises: PatternSyntaxException: if pattern has wrong syntax
 
     """
 
     if not verify_pattern(pattern):
         raise PatternSyntaxException(pattern)
 
-    def __match_node__(t, p):
+    def _match_node(t, p):
         pat_node = p.pop(0) if p else ""
-        return not pat_node or (__match_token__(t, pat_node, False) and __match_edge__(t.children,p))
+        return not pat_node or (_match_token(t, pat_node, False) and _match_edge(t.children,p))
 
-    def __match_edge__(edges,p):
+    def _match_edge(edges,p):
         pat_edge = p.pop(0) if p else ""
         if not pat_edge:
             return True
@@ -103,47 +102,44 @@ def match_tree(sentence, pattern):
             return False
         else:
             for (t) in edges:
-                if (__match_token__(t, pat_edge, True)) and __match_node__(t, list(p)):
+                if (_match_token(t, pat_edge, True)) and _match_node(t, list(p)):
                     return True
-                elif pat_edge == "**" and __match_edge__(t.children, ["**"] + p):
+                elif pat_edge == "**" and _match_edge(t.children, ["**"] + p):
                     return True
         return False
-    return __match_node__(sentence.root, pattern.split("/"))
+    return _match_node(sentence.root, pattern.split("/"))
 
 
 def find_tokens(sentence, pattern):
     """Find all tokens from parts of sentence fitted to pattern, being on the end of matched sub-tree(of sentence)
 
-        Args:
-            sentence: sentence from Spacy(see: http://spacy.io/docs/#doc-spans-sents) representing complete statement
-            pattern: pattern to which sentence will be compared
+        :param sentence: sentence from Spacy(see: http://spacy.io/docs/#doc-spans-sents) representing complete statement
+        :param pattern: pattern to which sentence will be compared
 
-        Returns:
-            Spacy tokens(see: http://spacy.io/docs/#token) found at the end of pattern if whole pattern match
+        :return: Spacy tokens(see: http://spacy.io/docs/#token) found at the end of pattern if whole pattern match
 
-        Raises:
-            PatternSyntaxException: if pattern has wrong syntax
+        :raises: PatternSyntaxException: if pattern has wrong syntax
 
     """
 
     if not verify_pattern(pattern):
         raise PatternSyntaxException(pattern)
 
-    def __match_node__(t, p, tokens):
+    def _match_node(t, p, tokens):
         pat_node = p.pop(0) if p else ""
-        res = not pat_node or (__match_token__(t, pat_node, False) and (not p or __match_edge__(t.children, p, tokens)))
+        res = not pat_node or (_match_token(t, pat_node, False) and (not p or _match_edge(t.children, p, tokens)))
         if res and not p:
             tokens.append(t)
         return res
 
-    def __match_edge__(edges,p, tokens):
+    def _match_edge(edges,p, tokens):
         pat_edge = p.pop(0) if p else ""
         if pat_edge:
             for (t) in edges:
-                if __match_token__(t, pat_edge, True):
-                    __match_node__(t, list(p), tokens)
+                if _match_token(t, pat_edge, True):
+                    _match_node(t, list(p), tokens)
                     if pat_edge == "**":
-                        __match_edge__(t.children, ["**"] + p, tokens)
+                        _match_edge(t.children, ["**"] + p, tokens)
     result_tokens = []
-    __match_node__(sentence.root, pattern.split("/"), result_tokens)
+    _match_node(sentence.root, pattern.split("/"), result_tokens)
     return result_tokens
