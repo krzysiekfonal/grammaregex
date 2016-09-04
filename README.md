@@ -44,12 +44,20 @@ connected by pobj(object of preposition) with NNP(singular noun) we will have su
 VBD/prep/IN/pobj/NNP
 
 You can use '\*' char to express any edge or token like: 
+
 VBD/\*/IN - verb connected by any dependency with IN
+
 or 
+
 \*/prep/IN - any root node connected by prep with IN
 
 You can also use '\*\*' chars to express any edge on any level like:
+
 VBD/\*\*/DT - verb connected with eny edge n-times with DT at the end
+
+There is also possibility to use list to express "one of ..." like:
+
+VBD/prep/IN/pobj/[IN,DT]
 
 
 ## 4. API docs
