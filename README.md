@@ -34,8 +34,8 @@ So the analogy to path-patterns like dir/dir/.../dir/file is that we also travel
 directory tree in OS and you can treat node as file and edge as directory with the differences:
 -Instead of directory name we have name of dependency(edge) with parent token
 -Instead of file we have token(node)
--path is consist of alternate in sequence node/edge/node/edge (opposite to path-pattern where we have
-only dirs till file on the end).
+-path consists of alternate in sequence node/edge/node/edge (opposite to path-pattern where we have
+only directories with a file on the end).
 Grammar pattern always starts with node because root token doesn't have any dependency and ends on final token.
 Node is one of token part, it can be: pos(e.g. ADV, NOUN), tag(e.g. VBD, NNP), lemma(base of word) or entity_names type(e.g. PERSON)
 
