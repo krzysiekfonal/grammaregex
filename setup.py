@@ -3,7 +3,7 @@ from setuptools import setup
 setup(name='grammaregex',
       version='0.1.1',
       description='grammaregex - library for matching and finding tree sentence in regex-like way',
-      long_description='This library allow you to find single tokens in sentences or match sentence by grammar regex-like expressions.',
+      long_description='This library allows you to find single tokens in sentences or match sentence by grammar regex-like expressions.',
       classifiers=[
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: MIT License',
