@@ -67,11 +67,11 @@ def print_tree(sent, token_attr):
 
     """
     def __print_sent__(token, attr):
-        print "{",
+        print("{", end=" ")
         [__print_sent__(t, attr) for t in token.lefts]
-        print "%s->%s(%s)" % (token,token.dep_,token.tag_ if not attr else getattr(token, attr)),
+        print(u"%s->%s(%s)" % (token,token.dep_,token.tag_ if not attr else getattr(token, attr)), end="")
         [__print_sent__(t, attr) for t in token.rights]
-        print "}",
+        print("}", end=" ")
     return __print_sent__(sent.root, token_attr)
 
 
