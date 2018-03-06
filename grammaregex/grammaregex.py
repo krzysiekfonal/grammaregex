@@ -1,3 +1,4 @@
+from __future__ import print_function
 """
 .. module:: grammaregex
    :platform: Unix, Windows, Linux
